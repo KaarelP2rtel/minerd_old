@@ -14,7 +14,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 <!-- Top container -->
 <div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
   <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="fa fa-bars"></i>  Menu</button>
-  <span class="w3-bar-item w3-right">Ülo</span>
+  <span class="w3-bar-item w3-right">Minerd</span>
 </div>
 
 <!-- Sidebar/menu -->
@@ -50,7 +50,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
           <h3>{{status}}</h3>
         </div>
         <div class="w3-clear"></div>
-        <h4>{{uptime}}</h4>
+        <h4>Uptime: {{uptime}} minutes</h4>
       </div>
     </div>
     <div class="w3-quarter">
@@ -65,12 +65,12 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     </div>
     <div class="w3-quarter">
       <div class="w3-container w3-teal w3-padding-16">
-        <div class="w3-left"><h3>€€€</h3></div>
+        <div class="w3-left"><h3>Difficulty</h3></div>
         <div class="w3-right">
           <h3></h3>
         </div>
         <div class="w3-clear"></div>
-        <h4>{{moneyrate}}</h4>
+        <h4>{{diff}}</h4>
       </div>
     </div>
     <div class="w3-quarter">
@@ -89,7 +89,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 
   <div class="w3-panel">
     <form method="post">
-      <input type="text" name="password">
+      <input type="password" name="password">
       <input class="w3-button w3-dark-grey" type="submit" value="Restart">
     </form>
     <div class="w3-row-padding" style="margin:0 -16px">
@@ -116,10 +116,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
         <td>ZEC/BTC</td>
         <td>{{zecprice}}</td>
       </tr>
-      <tr>
-        <td>ZEC Point of Profitability</td>
-        <td>{{zecprof}}</td>
-      </tr>
+      
     </table><br>
     
   </div>
@@ -134,7 +131,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   <!-- Footer -->
   <footer class="w3-container w3-padding-16 w3-light-grey">
     <h4></h4>
-    <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a> and C<sub>2</sub>H<sub>5</sub>OH</p>
+    <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a>, Python and C<sub>2</sub>H<sub>5</sub>OH</p>
   </footer>
 
   <!-- End page content -->
