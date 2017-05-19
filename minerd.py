@@ -1,7 +1,29 @@
+from functools import wraps
 import requests
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, Response
 app=Flask(__name__)
+def check_auth(username, password):
+    """This function is called to check if a username /
+    password combination is valid.
+    """
+    return username == 'admin' and password == 'secret'
+
+def authenticate():
+    """Sends a 401 response that enables basic auth"""
+    return Response(
+    'FUCK OFF', 401,
+    {'WWW-Authenticate': 'Basic realm="Login Required"'})
+
+def requires_auth(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        auth = request.authorization
+        if not auth or not check_auth(auth.username, auth.password):
+            return authenticate()
+        return f(*args, **kwargs)
+    return decorated
 @app.route("/", methods=["GET","POST"])
+@requires_auth
 def hello():
 	
 	priceApi=requests.get("https://api.coinmarketcap.com/v1/ticker/bitcoin/?convert=EUR")
@@ -52,7 +74,14 @@ def hello():
 	
 	
 	return render_template("template.html", status=status, uptime=uptime, hashrate=hashrate, diff=diff, balance=balance, eurprice=eurprice, usdprice=usdprice, zecprice=zecprice, miner1=miner1)
-	
+@app.route("/lul", methods=["GET","POST"])
+def lol():
+	return render_template("template.html")
+
+
+
+
+
 if __name__=="__main__":
 	app.run(host="0.0.0.0",port=80)
 	 
