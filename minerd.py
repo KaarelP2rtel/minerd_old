@@ -66,7 +66,7 @@ def hello():
 	eurprice = getEur()
 	usdprice = getUsd()
 	zecprice = getZec()
-	miner1 = "Ülo"
+	miner1 = "Ylo"
 	if request.method=="POST":
 		password=request.form['password']
 		if password=="salakala":
