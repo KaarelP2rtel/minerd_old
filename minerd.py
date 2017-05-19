@@ -40,7 +40,7 @@ def hello():
 	zecApi=requests.get("https://api.coinmarketcap.com/v1/ticker/zcash/")
 	zecData=zecApi.json()
 	def getStatus():
-		if hashrate=="000":
+		if hashrate=="0":
 			
 			return "Fucked"
 		else:
