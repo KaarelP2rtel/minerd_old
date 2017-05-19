@@ -1,6 +1,11 @@
+import serial
+import time
 from functools import wraps
 import requests
 from flask import Flask, render_template, request, Response
+
+ser=serial.Serial("/dev/ttyUSB0")
+
 app=Flask(__name__)
 def check_auth(username, password):
     """This function is called to check if a username /
@@ -41,11 +46,17 @@ def hello():
 		else:
 			return "Up"
 	def getUptime():
-		return workerData["result"]["workers"][0][2]
+		try:
+			return workerData["result"]["workers"][0][2]
+		except IndexError:
+			return "0"
 	def getHashrate():
 		return minerData["result"]["stats"][2]["accepted_speed"][8:]+"0"
 	def getDiff():
-		return workerData["result"]["workers"][0][4]
+		try:
+			return workerData["result"]["workers"][0][4]
+		except IndexError:
+			return "0"
 	def getBalance():
 		return minerData["result"]["stats"][2]["balance"]+ " BTC"
 	def getEur():
@@ -71,6 +82,9 @@ def hello():
 		password=request.form['password']
 		if password=="salakala":
 			print("RESTARTING")
+			ser.write(b"a")
+			time.sleep(10)
+			ser.write(b"A")
 	
 	
 	return render_template("template.html", status=status, uptime=uptime, hashrate=hashrate, diff=diff, balance=balance, eurprice=eurprice, usdprice=usdprice, zecprice=zecprice, miner1=miner1)
