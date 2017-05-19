@@ -51,7 +51,10 @@ def hello():
 		except IndexError:
 			return "0"
 	def getHashrate():
-		return minerData["result"]["stats"][2]["accepted_speed"][8:]+"0"
+		try:
+			return workerData["result"]["workers"][0][1]["a"]
+		except IndexError:
+			return "0"
 	def getDiff():
 		try:
 			return workerData["result"]["workers"][0][4]
