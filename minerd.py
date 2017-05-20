@@ -6,12 +6,18 @@ from flask import Flask, render_template, request, Response
 
 ser=serial.Serial("/dev/ttyUSB0")
 
+
+file = open("conf","r")
+confU=file.readline()[:-1]
+confP=file.readline()[:-1]
+confR=file.readline()[:-1]
+
 app=Flask(__name__)
 def check_auth(username, password):
     """This function is called to check if a username /
     password combination is valid.
     """
-    return username == 'admin' and password == 'secret'
+    return username == confU and password == confP
 
 def authenticate():
     """Sends a 401 response that enables basic auth"""
@@ -33,7 +39,7 @@ def hello():
     pwstat=""
     if request.method=="POST":
         password=request.form['password']
-        if password=="salakala":
+        if password==confR:
             print("RESTARTING")
             pwstat="Restart Successful"
             ser.write(b"a")
