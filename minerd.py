@@ -4,7 +4,7 @@ from functools import wraps
 import requests
 from flask import Flask, render_template, request, Response
 
-ser=serial.Serial("/dev/ttyUSB0")
+#ser=serial.Serial("/dev/ttyUSB0")
 
 app=Flask(__name__)
 def check_auth(username, password):
@@ -30,75 +30,49 @@ def requires_auth(f):
 @app.route("/", methods=["GET","POST"])
 @requires_auth
 def hello():
-	
-	priceApi=requests.get("https://api.coinmarketcap.com/v1/ticker/bitcoin/?convert=EUR")
-	priceData=priceApi.json()
-	minerApi=requests.get("https://api.nicehash.com/api?method=stats.provider&addr=36VitWXAXFyvdKaui9sPuKDnQwdtBWGieV")
-	minerData=minerApi.json()
-	workerApi=requests.get("https://api.nicehash.com/api?method=stats.provider.workers&addr=36VitWXAXFyvdKaui9sPuKDnQwdtBWGieV&algo=24")
-	workerData=workerApi.json()
-	zecApi=requests.get("https://api.coinmarketcap.com/v1/ticker/zcash/")
-	zecData=zecApi.json()
-	def getStatus():
-		if hashrate=="0":
-			
-			return "Fucked"
-		else:
-			return "Up"
-	def getUptime():
-		try:
-			return workerData["result"]["workers"][0][2]
-		except IndexError:
-			return "0"
-	def getHashrate():
-		try:
-			return workerData["result"]["workers"][0][1]["a"]
-		except IndexError:
-			return "0"
-	def getDiff():
-		try:
-			return workerData["result"]["workers"][0][4]
-		except IndexError:
-			return "0"
-	def getBalance():
-		return minerData["result"]["stats"][2]["balance"]+ " BTC"
-	def getEur():
-		return priceData[0]["price_eur"][:7]
-	def getUsd():
-		return priceData[0]["price_usd"]
-	def getZec():
-		return zecData[0]["price_btc"]
-
-	
-	
+    pwstat=""
+    if request.method=="POST":
+        password=request.form['password']
+        if password=="salakala":
+            print("RESTARTING")
+            pwstat="Restart Successful"
+            #ser.write(b"a")
+            #time.sleep(10)
+            #ser.write(b"A")
+        else:
+            pwstat="Incorrect Password"
+            
+    priceApi=requests.get("https://api.coinmarketcap.com/v1/ticker/bitcoin/?convert=EUR")
+    minerApi=requests.get("https://api.nicehash.com/api?method=stats.provider&addr=36VitWXAXFyvdKaui9sPuKDnQwdtBWGieV")
+    workerApi=requests.get("https://api.nicehash.com/api?method=stats.provider.workers&addr=36VitWXAXFyvdKaui9sPuKDnQwdtBWGieV&algo=24")
+    zecApi=requests.get("https://api.coinmarketcap.com/v1/ticker/zcash/")
+    priceData=priceApi.json()
+    minerData=minerApi.json()
+    workerData=workerApi.json()
+    zecData=zecApi.json()
 		  
-	uptime = getUptime()
-	hashrate = getHashrate()
-	status =  getStatus()
-	diff = getDiff()
-	balance = getBalance()
-	eurprice = getEur()
-	usdprice = getUsd()
-	zecprice = getZec()
-	miner1 = "Ylo"
-	if request.method=="POST":
-		password=request.form['password']
-		if password=="salakala":
-			print("RESTARTING")
-			ser.write(b"a")
-			time.sleep(10)
-			ser.write(b"A")
+    try:
+        uptime = workerData["result"]["workers"][0][2]
+        hashrate = workerData["result"]["workers"][0][1]["a"]
+        diff=workerData["result"]["workers"][0][4]
+    except IndexError:
+        uptime = "0"
+        hashrate = "0"
+        diff = "0"
+		
+    if hashrate == "0":
+        status = "Fucked"
+    else:
+        status = "Up"
+	            
+    balance = minerData["result"]["stats"][2]["balance"]+ " BTC"
+    eurprice = priceData[0]["price_eur"][:7]
+    usdprice = priceData[0]["price_usd"]
+    zecprice = zecData[0]["price_btc"]
+    miner1 = "Ylo"
 	
-	
-	return render_template("template.html", status=status, uptime=uptime, hashrate=hashrate, diff=diff, balance=balance, eurprice=eurprice, usdprice=usdprice, zecprice=zecprice, miner1=miner1)
-@app.route("/lul", methods=["GET","POST"])
-def lol():
-	return render_template("template.html")
-
-
-
-
+    return render_template("template.html", status=status, uptime=uptime, hashrate=hashrate, diff=diff, balance=balance, eurprice=eurprice, usdprice=usdprice, zecprice=zecprice, miner1=miner1, pwstat=pwstat)
 
 if __name__=="__main__":
-	app.run(host="0.0.0.0",port=80)
+    app.run(host="0.0.0.0",port=80)
 	 
