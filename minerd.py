@@ -4,7 +4,7 @@ from functools import wraps
 import requests
 from flask import Flask, render_template, request, Response
 
-ser=serial.Serial("/dev/ttyUSB0")
+#ser=serial.Serial("/dev/ttyUSB0")
 
 file = open("conf","r")
 confU=file.readline()[:-1]
@@ -65,9 +65,9 @@ def hello():
         if password==confR:
             print("RESTARTING")
             pwstat="Restart Successful"
-            ser.write(b"a")
+#            ser.write(b"a")
             time.sleep(10)
-            ser.write(b"A")
+#            ser.write(b"A")
         else:
             pwstat="Incorrect Password"
             
@@ -84,7 +84,7 @@ def hello():
         uptime = upString(workerData["result"]["workers"][0][2])
         hashrate = workerData["result"]["workers"][0][1]["a"]
     except IndexError:
-        uptime = " "
+        uptime = "0 minutes"
         hashrate = "0"
     if hashrate == "0":
         status = "Fucked"
