@@ -6,21 +6,43 @@ from flask import Flask, render_template, request, Response
 
 ser=serial.Serial("/dev/ttyUSB0")
 
-
 file = open("conf","r")
 confU=file.readline()[:-1]
 confP=file.readline()[:-1]
 confR=file.readline()[:-1]
 
 app=Flask(__name__)
+
+def upString(minutes):
+        minutes=int(minutes)
+        r=""
+        dys=int(minutes/1440)
+        hrs=int((minutes-dys*1440)/60)
+        mns=minutes-dys*1440-hrs*60
+        if dys==1:
+            days=" day "
+        else:
+            days=" days "
+        if hrs==1:
+            hours=" hour "
+        else:
+            hours=" hours "
+        if mns==1:
+            mins=" minute"
+        else:
+            mins=" minutes"
+        if dys:
+            r+=str(dys)+days
+        if hrs:
+            r+=str(hrs)+hours
+        if mns:
+            r+=str(mns)+mins
+        return r
+
 def check_auth(username, password):
-    """This function is called to check if a username /
-    password combination is valid.
-    """
-    return username == confU and password == confP
+        return username == confU and password == confP
 
 def authenticate():
-    """Sends a 401 response that enables basic auth"""
     return Response(
     'FUCK OFF', 401,
     {'WWW-Authenticate': 'Basic realm="Login Required"'})
@@ -33,6 +55,7 @@ def requires_auth(f):
             return authenticate()
         return f(*args, **kwargs)
     return decorated
+
 @app.route("/", methods=["GET","POST"])
 @requires_auth
 def hello():
@@ -58,14 +81,13 @@ def hello():
     zecData=zecApi.json()
 		  
     try:
-        uptime = workerData["result"]["workers"][0][2]
+        uptime = upString(workerData["result"]["workers"][0][2])
         hashrate = workerData["result"]["workers"][0][1]["a"]
         diff=workerData["result"]["workers"][0][4]
     except IndexError:
         uptime = "0"
         hashrate = "0"
         diff = "0"
-		
     if hashrate == "0":
         status = "Fucked"
     else:
@@ -76,7 +98,7 @@ def hello():
     usdprice = priceData[0]["price_usd"]
     zecprice = zecData[0]["price_btc"]
     miner1 = "Ylo"
-	
+    
     return render_template("template.html", status=status, uptime=uptime, hashrate=hashrate, diff=diff, balance=balance, eurprice=eurprice, usdprice=usdprice, zecprice=zecprice, miner1=miner1, pwstat=pwstat)
 
 if __name__=="__main__":
