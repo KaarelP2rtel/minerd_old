@@ -83,23 +83,22 @@ def hello():
     try:
         uptime = upString(workerData["result"]["workers"][0][2])
         hashrate = workerData["result"]["workers"][0][1]["a"]
-        diff=workerData["result"]["workers"][0][4]
     except IndexError:
         uptime = "0"
         hashrate = "0"
-        diff = "0"
     if hashrate == "0":
         status = "Fucked"
     else:
         status = "Up"
 	            
-    balance = minerData["result"]["stats"][2]["balance"]+ " BTC"
+    balance = minerData["result"]["stats"][2]["balance"]
     eurprice = priceData[0]["price_eur"][:7]
+    balEur = str(float(balance)*float(eurprice))[:-8]
     usdprice = priceData[0]["price_usd"]
     zecprice = zecData[0]["price_btc"]
     miner1 = "Ylo"
     
-    return render_template("template.html", status=status, uptime=uptime, hashrate=hashrate, diff=diff, balance=balance, eurprice=eurprice, usdprice=usdprice, zecprice=zecprice, miner1=miner1, pwstat=pwstat)
+    return render_template("template.html", status=status, uptime=uptime, hashrate=hashrate, balEur=balEur, balance=balance, eurprice=eurprice, usdprice=usdprice, zecprice=zecprice, miner1=miner1, pwstat=pwstat)
 
 if __name__=="__main__":
     app.run(host="0.0.0.0",port=80)
