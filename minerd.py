@@ -84,7 +84,7 @@ def hello():
         uptime = upString(workerData["result"]["workers"][0][2])
         hashrate = workerData["result"]["workers"][0][1]["a"]
     except IndexError:
-        uptime = ""
+        uptime = " "
         hashrate = "0"
     if hashrate == "0":
         status = "Fucked"
