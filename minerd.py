@@ -4,7 +4,7 @@ from functools import wraps
 import requests
 from flask import Flask, render_template, request, Response
 
-ser=serial.Serial("/dev/ttyUSB0")
+#ser=serial.Serial("/dev/ttyUSB0")
 
 file = open("conf","r")
 confU=file.readline()[:-1]
@@ -65,13 +65,13 @@ def hello():
         if password==confR:
             print("RESTARTING")
             pwstat="Restart Successful"
-            ser.write(b"a")
+            #ser.write(b"a")
             time.sleep(10)
-            ser.write(b"A")
+            #ser.write(b"A")
         else:
             pwstat="Incorrect Password"
             
-    priceApi=requests.get("https://api.coinmarketcap.com/v1/ticker/bitcoin/?convert=EUR")
+    priceApi=requests.get("http://api.coindesk.com/v1/bpi/currentprice.json")
     minerApi=requests.get("https://api.nicehash.com/api?method=stats.provider&addr=36VitWXAXFyvdKaui9sPuKDnQwdtBWGieV")
     workerApi=requests.get("https://api.nicehash.com/api?method=stats.provider.workers&addr=36VitWXAXFyvdKaui9sPuKDnQwdtBWGieV&algo=24")
     zecApi=requests.get("https://api.coinmarketcap.com/v1/ticker/zcash/")
@@ -92,9 +92,9 @@ def hello():
         status = "Up"
 	            
     balance = minerData["result"]["stats"][2]["balance"]
-    eurprice = priceData[0]["price_eur"][:7]
+    eurprice = str(priceData["bpi"]["EUR"]["rate_float"])[:-2]
     balEur = str(float(balance)*float(eurprice))
-    usdprice = priceData[0]["price_usd"]
+    usdprice = str(priceData["bpi"]["USD"]["rate_float"])[:-2]
     zecprice = zecData[0]["price_btc"]
     miner1 = "Ylo"
     
