@@ -4,7 +4,7 @@ from functools import wraps
 import requests
 from flask import Flask, render_template, request, Response
 
-#ser=serial.Serial("/dev/ttyUSB0")
+ser=serial.Serial("/dev/ttyUSB0")
 
 file = open("conf","r")
 confU=file.readline()[:-1]
@@ -65,9 +65,9 @@ def hello():
         if password==confR:
             print("RESTARTING")
             pwstat="Restart Successful"
-#            ser.write(b"a")
+            ser.write(b"a")
             time.sleep(10)
-#            ser.write(b"A")
+            ser.write(b"A")
         else:
             pwstat="Incorrect Password"
             
@@ -93,7 +93,7 @@ def hello():
 	            
     balance = minerData["result"]["stats"][2]["balance"]
     eurprice = priceData[0]["price_eur"][:7]
-    balEur = str(float(balance)*float(eurprice))[:-8]
+    balEur = str(float(balance)*float(eurprice))[:-]
     usdprice = priceData[0]["price_usd"]
     zecprice = zecData[0]["price_btc"]
     miner1 = "Ylo"
