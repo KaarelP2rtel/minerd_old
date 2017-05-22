@@ -93,7 +93,7 @@ def hello():
 	            
     balance = minerData["result"]["stats"][2]["balance"]
     eurprice = priceData[0]["price_eur"][:7]
-    balEur = str(float(balance)*float(eurprice))[:-]
+    balEur = str(float(balance)*float(eurprice))
     usdprice = priceData[0]["price_usd"]
     zecprice = zecData[0]["price_btc"]
     miner1 = "Ylo"
