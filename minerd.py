@@ -6,6 +6,33 @@ import requests
 from flask import Flask, render_template, request, Response
 
 
+def upString(minutes):
+        minutes = int(minutes)
+        r = ""
+        dys = int(minutes/1440)
+        hrs = int((minutes-dys*1440)/60)
+        mns = minutes-dys*1440-hrs*60
+        if dys == 1:
+            days = " day "
+        else:
+            days = " days "
+        if hrs == 1:
+            hours = " hour "
+        else:
+            hours = " hours "
+        if mns == 1:
+            mins = " minute"
+        else:
+            mins = " minutes"
+        if dys:
+            r += str(dys)+days
+        if hrs:
+            r += str(hrs)+hours
+        if mns:
+            r += str(mns)+mins
+        return r
+
+
 class Apis:
     uptime = "Loading"
     hashrate = "Loading"
@@ -19,33 +46,9 @@ class Apis:
     profEur = ""
     status = ""
 
-    def apiGet(self):
-        def upString(minutes):
-            minutes = int(minutes)
-            r = ""
-            dys = int(minutes/1440)
-            hrs = int((minutes-dys*1440)/60)
-            mns = minutes-dys*1440-hrs*60
-            if dys == 1:
-                days = " day "
-            else:
-                days = " days "
-            if hrs == 1:
-                hours = " hour "
-            else:
-                hours = " hours "
-            if mns == 1:
-                mins = " minute"
-            else:
-                mins = " minutes"
-            if dys:
-                r += str(dys)+days
-            if hrs:
-                r += str(hrs)+hours
-            if mns:
-                r += str(mns)+mins
-            return r
 
+    def apiGet(self):
+        
         try:
             priceApi = requests.get("http://api.coindesk.com/v1/bpi/currentprice.json")
             minerApi = requests.get("https://api.nicehash.com/api?method=stats.provider&addr=36VitWXAXFyvdKaui9sPuKDnQwdtBWGieV")
@@ -93,7 +96,7 @@ class Apis:
         print("APIs updated")
 
 
-ser = serial.Serial("/dev/ttyUSB0")
+#ser = serial.Serial("/dev/ttyUSB0")
 
 file = open("conf", "r")
 confU = file.readline()[:-1]
