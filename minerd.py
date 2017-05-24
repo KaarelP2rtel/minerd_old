@@ -63,7 +63,7 @@ class Apis:
         try:
             self.uptime = upString(workerData["result"]["workers"][0][2])
             self.hashrate = workerData["result"]["workers"][0][1]["a"]
-        except IndexError:
+        except:
             self.uptime = "0 minutes"
             self.hashrate = "0"
     
@@ -92,7 +92,7 @@ class Apis:
         print("APIs updated")
         
     
-ser=serial.Serial("/dev/ttyUSB0")
+#ser=serial.Serial("/dev/ttyUSB0")
 
 file = open("conf","r")
 confU=file.readline()[:-1]
@@ -134,9 +134,9 @@ def hello():
         if password==confR:
             print("RESTARTING")
             pwstat="Restart Successful"
-            ser.write(b"a")
+            #ser.write(b"a")
             time.sleep(10)
-            ser.write(b"A")
+            #ser.write(b"A")
         else:
             pwstat="Incorrect Password"
             
