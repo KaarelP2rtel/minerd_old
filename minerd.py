@@ -35,6 +35,14 @@ def upString(minutes):
         return r
 
 
+def formatValue(raw):
+    val1 = str(int(raw))+"."
+    dec=int((raw-int(raw))*100)
+    if(dec<10):
+        val2="0"+str(dec)
+    else:
+        val2=str(dec)
+    return val1+val2
 class Apis:
     uptime = "Loading"
     hashrate = "Loading"
@@ -78,20 +86,20 @@ class Apis:
         else:
             self.status = "Up"
 
-        balRaw = 1000*float(minerData["result"]["stats"][2]["balance"])
-        eurRaw = priceData["bpi"]["EUR"]["rate_float"]
-        self.balance = str(int(balRaw))+"."+str(int((balRaw-int(balRaw))*100))+" mBTC"
-        eur = eurRaw*balRaw/1000
-        self.balEur = str(int(eur))+"."+str(int((eur-int(eur))*100))+" €"
+        balMbtc = 1000*float(minerData["result"]["stats"][2]["balance"])
+        eurRate = priceData["bpi"]["EUR"]["rate_float"]
+        eur = eurRate*balMbtc/1000
+        self.balance=formatValue(balMbtc)+" mBTC"
+        self.balEur = formatValue(eur)+" €"
         self.usdprice = str(priceData["bpi"]["USD"]["rate_float"])[:7]
-        self.eurprice = str(eurRaw)[:7]
+        self.eurprice = str(eurRate)[:7]
         self.zecprice = zecData[0]["price_btc"]
 
         try:
-            profRaw = float(profData["result"]["current"][2]["profitability"])*1000*float(self.hashrate)
-            self.profit = str(int(profRaw))+"."+str(int((profRaw-int(profRaw))*100))+" mBTC"
-            prfEur = profRaw*eurRaw/1000
-            self.profEur = str(int(prfEur))+"."+str(int((prfEur-int(prfEur))*100))+" €"
+            profMbtc = float(profData["result"]["current"][2]["profitability"])*1000*float(self.hashrate)
+            self.profit = formatValue(profMbtc)+" mBTC"
+            prfEur = profMbtc*eurRate/1000
+            self.profEur = formatValue(prfEur)+" €"
         except KeyError:
             pass
 
