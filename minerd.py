@@ -5,7 +5,7 @@ from functools import wraps
 import requests
 from flask import Flask, render_template, request, Response
 
-no_of_times_serial_left_commented=5
+no_of_times_serial_left_commented=6
 
 
 def upString(minutes):
@@ -106,7 +106,7 @@ class Apis:
         print("APIs updated")
 
 
-#ser = serial.Serial("/dev/ttyUSB0")
+ser = serial.Serial("/dev/ttyUSB0")
 
 file = open("conf", "r")
 confU = file.readline()[:-1]
