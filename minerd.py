@@ -86,7 +86,7 @@ class Apis:
         else:
             self.status = "Up"
 
-        balMbtc = 1000*float(minerData["result"]["stats"][2]["balance"])
+        balMbtc = 1000*float(minerData["result"]["stats"][1]["balance"])
         eurRate = priceData["bpi"]["EUR"]["rate_float"]
         eur = eurRate*balMbtc/1000
         self.balance=formatValue(balMbtc)+" mBTC"
@@ -96,7 +96,7 @@ class Apis:
         self.zecprice = zecData[0]["price_btc"]
 
         try:
-            profMbtc = float(profData["result"]["current"][2]["profitability"])*1000*float(self.hashrate)
+            profMbtc = float(profData["result"]["current"][1]["profitability"])*1000*float(self.hashrate)
             self.profit = formatValue(profMbtc)+" mBTC"
             prfEur = profMbtc*eurRate/1000
             self.profEur = formatValue(prfEur)+" €"
@@ -106,7 +106,7 @@ class Apis:
         print("APIs updated")
 
 
-ser = serial.Serial("/dev/ttyUSB0")
+#ser = serial.Serial("/dev/ttyUSB0")
 
 file = open("conf", "r")
 confU = file.readline()[:-1]
